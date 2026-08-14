@@ -6,24 +6,18 @@ const {
 contextBridge.exposeInMainWorld("electronAPI", {
 	isElectron: true,
 
-	// Solicita ao processo principal que mostre
-	// a notificação nativa da pausa.
 	showBreakNotification: () => {
 	ipcRenderer.send(
 		"break-notification:show",
 	);
 },
 
-	// Fecha o exercício, remove o alwaysOnTop
-	// e minimiza a janela.
 	closeBreakOverlay: () => {
 		ipcRenderer.send(
 			"break-overlay:close",
 		);
 	},
 
-	// Chamado quando o utilizador clica
-	// na notificação ou no botão do alongamento.
 	onStartBreakExercise: (callback) => {
 		const listener = () => {
 			callback();
@@ -34,7 +28,6 @@ contextBridge.exposeInMainWorld("electronAPI", {
 			listener,
 		);
 
-		// Retorna uma função para remover o listener.
 		return () => {
 			ipcRenderer.removeListener(
 				"break-exercise:start",
@@ -43,8 +36,6 @@ contextBridge.exposeInMainWorld("electronAPI", {
 		};
 	},
 
-	// Chamado quando o processo principal
-	// solicita o fechamento do modal.
 	onCloseBreakExercise: (callback) => {
 		const listener = () => {
 			callback();

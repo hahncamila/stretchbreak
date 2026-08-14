@@ -64,40 +64,31 @@ function loadAppIcon() {
 function createMainWindow() {
 	const appIcon = loadAppIcon();
 
-	mainWindow = new BrowserWindow({
-		width: 960,
-		height: 720,
-		minWidth: 700,
-		minHeight: 600,
-		show: false,
-		center: true,
-		autoHideMenuBar: true,
-		icon: appIcon ?? iconPath,
+mainWindow = new BrowserWindow({
+	width: 720,
+	height: 680,
+	minWidth: 380,
+	minHeight: 340,
+	show: false,
+	center: true,
+	autoHideMenuBar: true,
+	icon: appIcon ?? iconPath,
 
-		webPreferences: {
-			preload: path.join(
-				__dirname,
-				"preload.cjs",
-			),
-			contextIsolation: true,
-			nodeIntegration: false,
-
-			/*
-			 * Mantém o timer ativo quando
-			 * a janela está escondida.
-			 */
-			backgroundThrottling: false,
-		},
-	});
+	webPreferences: {
+		preload: path.join(
+			__dirname,
+			"preload.cjs",
+		),
+		contextIsolation: true,
+		nodeIntegration: false,
+		backgroundThrottling: false,
+	},
+});
 
 	if (appIcon) {
 		mainWindow.setIcon(appIcon);
 	}
 
-	/*
-	 * Configura a identidade visual e o nome
-	 * da janela na versão instalada do Windows.
-	 */
 	if (process.platform === "win32") {
 		mainWindow.setAppDetails({
 			appId: windowsAppId,
@@ -133,10 +124,6 @@ function createMainWindow() {
 		mainWindow.show();
 	});
 
-	/*
-	 * O botão X esconde a aplicação,
-	 * mas mantém o timer funcionando.
-	 */
 	mainWindow.on("close", (event) => {
 		if (isQuitting) {
 			return;
@@ -334,10 +321,6 @@ function showBreakNotification() {
 		startBreakExercise();
 	};
 
-	/*
-	 * Apenas o botão da notificação inicia
-	 * o alongamento.
-	 */
 	notification.on("action", (event) => {
 		if (event.actionIndex === 0) {
 			handleStartExercise();
@@ -395,10 +378,7 @@ function closeBreakOverlay() {
 }
 
 app.whenReady().then(() => {
-	/*
-	 * A identidade precisa ser configurada
-	 * antes das notificações e da janela.
-	 */
+
 	if (process.platform === "win32") {
 		app.setAppUserModelId(windowsAppId);
 	}
@@ -427,8 +407,4 @@ app.on("before-quit", () => {
 });
 
 app.on("window-all-closed", () => {
-	/*
-	 * O app continua ativo no Tray.
-	 * Só encerra pela opção "Sair".
-	 */
 });

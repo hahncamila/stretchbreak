@@ -9,7 +9,9 @@ export function usePomodoro() {
 	const [timeLeft, setTimeLeft] = useState(
 		FOCUS_TIME_SECONDS,
 	);
+
 	const [isRunning, setIsRunning] = useState(false);
+
 	const [sessionType, setSessionType] =
 		useState<SessionType>("focus");
 
@@ -19,28 +21,27 @@ export function usePomodoro() {
 		}
 
 		const interval = setInterval(() => {
-			setTimeLeft((currentTimeLeft) =>
-				currentTimeLeft - 1,
-			);
+			setTimeLeft((currentTimeLeft) => {
+				if (currentTimeLeft > 1) {
+					return currentTimeLeft - 1;
+				}
+
+				// Quando o FOCO termina
+				if (sessionType === "focus") {
+					setSessionType("break");
+
+					return BREAK_TIME_SECONDS;
+				}
+
+				// Quando a PAUSA termina
+				setSessionType("focus");
+
+				return FOCUS_TIME_SECONDS;
+			});
 		}, 1000);
 
 		return () => clearInterval(interval);
-	}, [isRunning]);
-
-	useEffect(() => {
-		if (timeLeft > 0) {
-			return;
-		}
-
-		if (sessionType === "focus") {
-			setSessionType("break");
-			setTimeLeft(BREAK_TIME_SECONDS);
-			return;
-		}
-
-		setSessionType("focus");
-		setTimeLeft(FOCUS_TIME_SECONDS);
-	}, [timeLeft, sessionType]);
+	}, [isRunning, sessionType]);
 
 	const start = () => {
 		setIsRunning(true);
