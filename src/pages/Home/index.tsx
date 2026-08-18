@@ -45,6 +45,10 @@ export default function Home() {
 	}, [currentExercise]);
 
 	useEffect(() => {
+		sessionTypeRef.current = sessionType;
+	}, [sessionType]);
+
+	useEffect(() => {
 		if (previousSessionRef.current === sessionType) {
 			return;
 		}

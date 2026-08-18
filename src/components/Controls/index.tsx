@@ -27,14 +27,17 @@ export default function Controls({ onStart, onPause, onReset }: ControlsProps) {
 				}}>
 				<Button
 					variant="contained"
-					startIcon={<PlayArrowRoundedIcon sx={{ fontSize: 28 }} />}
 					onClick={onStart}
 					sx={{
 						height: ICON_BUTTON_SIZE,
-						minWidth: 160,
-						fontSize: "1rem",
+						width: ICON_BUTTON_SIZE,
+						minWidth: ICON_BUTTON_SIZE,
+						padding: 0,
+						display: "flex",
+						alignItems: "center",
+						justifyContent: "center",
 					}}>
-					Iniciar
+					<PlayArrowRoundedIcon sx={{ fontSize: 28 }} />
 				</Button>
 
 				<Button
